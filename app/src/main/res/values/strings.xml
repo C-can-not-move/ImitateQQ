@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ImitateQQ</string>
+    <string name="login_head">ImitateQQ</string>
+    <string name="login_id">Please enter qq number</string>
+    <string name="login_pwd">Please enter password</string>
+    <string name="login_btn">Login</string>
+    <string name="save_pwd">save</string>
+    <string name="regist_btn">regist</string>
+    <string name="sending_request">Logining</string>
+    <string name="register_head">registe</string>
+    <string name="reg_email_text">email:</string>
+    <string name="reg_email">Please enter the email</string>
+    <string name="reg_name_text">name:</string>
+    <string name="reg_name">Please enter your nickname</string>
+    <string name="reg_pwd_text">pass :</string>
+    <string name="reg_pwd">Please enter your password</string>
+    <string name="reg_pwd_text2">word :</string>
+    <string name="reg_pwd2">Please confirm your password</string>
+</resources>

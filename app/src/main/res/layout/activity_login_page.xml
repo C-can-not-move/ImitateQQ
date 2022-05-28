@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".LoginPage">
+
+    <TextView
+        android:id="@+id/Login_Head"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="@string/login_head"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.124" />
+
+    <LinearLayout
+        android:id="@+id/Input"
+        android:layout_width="350dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Login_Head">
+
+        <EditText
+            android:id="@+id/Login_id"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="@string/login_id"
+            android:inputType="number"
+            android:textColorHint="#757575"
+            android:autofillHints="" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F44336" />
+
+        <EditText
+            android:id="@+id/Login_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="@string/login_pwd"
+            android:inputType="textPassword"
+            android:textColorHint="#757575"
+            android:autofillHints="" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/Login_btn"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:onClick="myOnClick"
+        android:text="@string/login_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Input" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="350dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Login_btn">
+
+        <CheckBox
+            android:id="@+id/Save_pwd"
+            android:layout_width="131dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/save_pwd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/Regist_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="myOnClick"
+            android:text="@string/regist_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
