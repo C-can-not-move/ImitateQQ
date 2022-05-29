@@ -1,4 +1,4 @@
-package com.swufe.czj.imitateqq;
+package com.swufe.czj.imitateqq.common.util;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

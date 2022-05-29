@@ -1,8 +1,5 @@
 package com.swufe.czj.imitateqq;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,23 +7,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.swufe.czj.imitateqq.client.ClientInputThread;
+import com.swufe.czj.imitateqq.client.Client;
 import com.swufe.czj.imitateqq.client.ClientOutputThread;
 import com.swufe.czj.imitateqq.common.bean.User;
 import com.swufe.czj.imitateqq.common.transportBean.TranObject;
 import com.swufe.czj.imitateqq.common.transportBean.TranObjectType;
 import com.swufe.czj.imitateqq.common.util.Constants;
+import com.swufe.czj.imitateqq.common.util.DialogFactory;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.List;
 
-public class LoginPage extends AppCompatActivity implements Runnable  {
+public class LoginPage extends MyActivity implements Runnable {
 
-    private EditText id ;
+    private EditText id;
     private EditText pwd;
     private CheckBox savePwd;
+    private MyApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +38,10 @@ public class LoginPage extends AppCompatActivity implements Runnable  {
             StrictMode.setThreadPolicy(policy);
         }
 
-        id = (EditText)findViewById(R.id.Login_id);
-        pwd = (EditText)findViewById(R.id.Login_pwd);
+        id = (EditText) findViewById(R.id.Login_id);
+        pwd = (EditText) findViewById(R.id.Login_pwd);
     }
+
     /**
      * 处理点击事件
      */
@@ -62,66 +62,57 @@ public class LoginPage extends AppCompatActivity implements Runnable  {
      * 跳转到注册页面
      */
     public void goRegisterActivity() {
-        Log.i("test","成功");
-        Intent intent = new Intent(this,RegisterPage.class);
+        Log.i("test", "成功");
+        Intent intent = new Intent(this, RegisterPage.class);
         startActivity(intent);
     }
+
     /**
      * 提交账号密码信息到服务器进行验证
      */
 
     private void submit() throws Exception {
         String idStr = id.getText().toString();
-        String pwdStr = pwd.getText().toString();
-        if (idStr.length() == 0 || pwdStr.length() == 0) {
-            DialogFactory.nomalDialog(this,"登陆失败", "帐号或密码不能为空");
+        String pwdSrt = pwd.getText().toString();
+        if (idStr.length() == 0 || pwdSrt.length() == 0) {
+            DialogFactory.nomalDialog(this, "QQ登录", "帐号或密码不能为空哦");
         } else {
-            ProgressDialog progressDialog=DialogFactory.creatRequestDialog(this,"正在登陆");
-
-            Log.i("LoginPage","开始发送消息");
-            Socket socket = new Socket(Constants.SERVER_IP,Constants.SERVER_PORT);
-            ClientOutputThread out = new ClientOutputThread(socket);
-            TranObject<User> o = new TranObject<User>(TranObjectType.LOGIN);
-            User u = new User();
-            u.setId(Integer.parseInt(idStr));
-            u.setPassword(pwdStr);
-            o.setObject(u);
-            out.setMsg(o);
-            out.start();
-            Log.i("LoginPage","发送消息结束");
-            //接收消息
-            Log.i("LoginPage","开始接收消息");
-            ClientInputThread in = new ClientInputThread(socket);
-            progressMessage(in.call());
-            Log.i("LoginPage","接收消息结束");
-            progressDialog.dismiss();
+            if (application.isClientStart()) {
+                Client client = application.getClient();
+                ClientOutputThread out = client.getClientOutputThread();
+                TranObject<User> o = new TranObject<User>(TranObjectType.LOGIN);
+                User u = new User();
+                u.setId(Integer.parseInt(idStr));
+                u.setPassword(pwdSrt);//Encode.getEncode("MD5", pwdSrt)
+                o.setObject(u);
+                out.setMsg(o);
+            } else {
+                DialogFactory.nomalDialog(this, "QQ登录", "服务器暂未开放哦");
+            }
         }
     }
 
-    public void progressMessage(TranObject msg) {
-        Log.i("LoginPage",msg.toString());
+    @Override
+    // 依据自己需求处理父类广播接收者收取到的消息
+    public void getMessage(TranObject msg) {
         if (msg != null) {
-            Log.i("LoginPage", "收到了登陆请求的反馈信息！！！");
+            // System.out.println("Login:" + msg);
             switch (msg.getType()) {
-                case LOGIN:
+                case LOGIN:// LoginActivity只处理登录的消息
                     List<User> list = (List<User>) msg.getObject();
-                    if (list != null && list.size() > 0) {
-                        Log.i("LoginPage", "登陆成功！！！");
-                        Intent intent = new Intent(this,MainActivity.class);
-                        startActivity(intent);
+                    if (list.size() > 0) {
+                        Intent i = new Intent(this, MainActivity.class);
+                        i.putExtra(Constants.MSGKEY, msg);
+                        startActivity(i);
+                        finish();
+                        Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
                     } else {
-                        DialogFactory.nomalDialog(this,"登陆失败", "帐号或密码错误！！！");
-                        Log.i("LoginPage", "登陆失败");
+                        DialogFactory.nomalDialog(this, "登陆失败", "帐号或密码错误");
                     }
                     break;
                 default:
                     break;
             }
-
-        }
-        else
-        {
-            Log.i("LoginPage", "收到了错误反馈信息！！！");
         }
     }
 
